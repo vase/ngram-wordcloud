@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js" integrity="sha512-HjKxWye8lJGPu5q1u/ZYkHlJrJdm6KGr89E6tOrXeKm1mItb1xusPU8QPcKVhP8F9LjpZT7vsu1Fa+dQywP4eg==" crossorigin="anonymous"></script>
+        <script src="./bundle.js"></script>
+    </head>
+    <body>
+        <h3>Input Text</h3>
+        <textarea placeholder="Paste responses here, newline separated" cols="80" id="input"></textarea>
+        <br>
+        <hr>
+        <input oninput="(() => { document.querySelector('#rangeValue').innerHTML =  this.value })()" type="range" min=1 max=8 value=2 class="slider" id="ngramRange">
+        <span id="rangeValue">2</span><span> word(s)</span>
+        <br>
+        <button id="triggerButton">Analyze</button>
+        <br>
+
+        <script type="text/javascript">
+            document.querySelector("#triggerButton").onclick = () => {
+                document.querySelector("#triggerButton").disabled = true
+                setTimeout(() => {
+                    triggerWordcloud()
+                    document.querySelector("#triggerButton").disabled = false
+                }, 10)
+            }
+            function triggerWordcloud() {
+                !!document.querySelector("#wordcloud") && document.querySelector("#wordcloud").remove();
+                console.log(document.querySelector("#triggerButton"))
+                const inputText = document.querySelector("#input").value || ""
+                const desiredNgramCount = Number(document.querySelector('#ngramRange').value)
+                window.analysed = window.natural.NGrams.ngrams(inputText, desiredNgramCount, null, null, true)
+                // const splitByResponse = inputText.split('\n')
+                // for (const response of splitByResponse) {
+                //     const responseWordArray = response.split(/\s/mg)
+                //     for (let i = 0; i < responseWordArray.length - desiredNgramCount + 1; i++) {
+                //         console.log(i, i+desiredNgramCount)
+                //         console.log(responseWordArray.slice(i, i+desiredNgramCount))
+                //     }
+                // }
+                
+                const sortingNGramFrequency = []
+                for (let ngram of Object.keys(window.analysed.frequencies)) {
+                    sortingNGramFrequency.push(Object.assign({}, {
+                        text: ngram.slice(1,-1).replace(/,/gm, ""),
+                        size: window.analysed.frequencies[ngram]
+                    }))
+                }
+                sortingNGramFrequency.sort((a, b) => a.frequency - b.frequency)
+                // console.log(sortingNGramFrequency)
+                const layout = d3.layout.cloud()
+                .size([1500,800])
+                .words(sortingNGramFrequency)
+                .padding(5)
+                // .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .rotate(0)
+                .font("Impact")
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw);
+
+                layout.start()
+
+                function draw(words) {
+                    d3.select("body").append("svg")
+                    .attr("width", layout.size()[0])
+                    .attr("height", layout.size()[1])
+                    .attr("id", "wordcloud")
+                    .append("g")
+                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                    .selectAll("text")
+                    .data(words)
+                    .enter().append("text")
+                    .style("font-size", function(d) { return d.size + "px"; })
+                    .style("font-family", "Impact")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", function(d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .text(function(d) { return d.text; });
+                }
+            }
+        </script>
+    </body>
+</html>

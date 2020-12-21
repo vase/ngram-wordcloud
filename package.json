@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "natural": "^2.1.5"
+  },
+  "name": "ngram-wordcloud",
+  "description": "",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bundle": "npx browserify main.js --exclude webworker-threads -o bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vase/ngram-wordcloud.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vase/ngram-wordcloud/issues"
+  },
+  "homepage": "https://github.com/vase/ngram-wordcloud#readme"
+}
