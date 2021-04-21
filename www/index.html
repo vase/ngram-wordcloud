@@ -4,7 +4,7 @@
         <meta charset="utf-8"/>
         <script src="https://d3js.org/d3.v6.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js" integrity="sha512-HjKxWye8lJGPu5q1u/ZYkHlJrJdm6KGr89E6tOrXeKm1mItb1xusPU8QPcKVhP8F9LjpZT7vsu1Fa+dQywP4eg==" crossorigin="anonymous"></script>
-        <script src="./bundle.js"></script>
+        <script src="/bundle.js"></script>
     </head>
     <body>
         <h3>Input Text</h3>
@@ -30,7 +30,7 @@
                 console.log(document.querySelector("#triggerButton"))
                 const inputText = document.querySelector("#input").value || ""
                 const desiredNgramCount = Number(document.querySelector('#ngramRange').value)
-                window.analysed = window.natural.NGrams.ngrams(inputText, desiredNgramCount, null, null, true)
+                window.analysed = window.NGrams.ngrams(inputText, desiredNgramCount, null, null, true)
                 // const splitByResponse = inputText.split('\n')
                 // for (const response of splitByResponse) {
                 //     const responseWordArray = response.split(/\s/mg)

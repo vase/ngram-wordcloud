@@ -1,0 +1,1 @@
+window.NGrams = require('natural').NGrams

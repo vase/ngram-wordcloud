@@ -1,1 +1,0 @@
-window.natural = require('natural')
